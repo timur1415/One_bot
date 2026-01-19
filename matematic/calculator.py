@@ -1,7 +1,7 @@
 from telegram.ext import ContextTypes
 from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup
 
-from config.states import FIRST_NUMBER, LAST_NUMBER, OPERATION, MATEMATICS_MENU
+from config.states import FIRST_NUMBER, LAST_NUMBER, OPERATION
 
 
 async def first_number(update: Update, context: ContextTypes.DEFAULT_TYPE):
