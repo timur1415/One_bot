@@ -37,14 +37,6 @@ async def tone_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return LANG_TO
 
 
-# async def lang_from_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-#     context.user_data["tone"] = update.effective_message.text
-#     await context.bot.send_message(
-#         chat_id=update.effective_chat.id, text="с какого языка переводить?"
-#     )
-#     return LANG_TO
-
-
 async def lang_to_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data["tone"] = update.effective_message.text
     await context.bot.send_message(

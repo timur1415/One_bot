@@ -14,7 +14,8 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from config.states import MAIN_MENU
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    keyboard = [[InlineKeyboardButton("перевод текста в нужном тоне ", callback_data='start_translation')]]
+    keyboard = [[InlineKeyboardButton("перевод текста в нужном тоне ", callback_data='start_translation')],
+                [InlineKeyboardButton("математика", callback_data='start_mathematics')]]
     reply_markup = InlineKeyboardMarkup(keyboard)
     query = update.callback_query
     if query:

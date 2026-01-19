@@ -10,11 +10,17 @@ from telegram.ext import (
 )
 from config.config import TOKEN
 
-from config.states import TONE, TRANSLATION, ANSWER, MAIN_MENU,  LANG_TO #LANG_FROM,
+from config.states import TONE, TRANSLATION, ANSWER, MAIN_MENU,  LANG_TO, MATEMATICS_MENU, FIRST_NUMBER, LAST_NUMBER, OPERATION
 
 from translation.translation import translation_handler, tone_handler, answer_handler, lang_to_handler#lang_from_handler, 
 
 from start import start
+
+from matematic.matematics_handler import matematics_handler
+
+from matematic.calculator import first_number, get_first_number, get_operation, get_last_number 
+
+
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -27,7 +33,22 @@ if __name__ == "__main__":
         entry_points=[CommandHandler("start", start)],
         states={
             MAIN_MENU: [
-                CallbackQueryHandler(translation_handler, pattern='^start_translation$')
+                CallbackQueryHandler(translation_handler, pattern='^start_translation$'),
+                CallbackQueryHandler(matematics_handler, pattern='^start_mathematics$')
+            ],
+            MATEMATICS_MENU: [
+                CallbackQueryHandler(first_number, pattern='^calculator$'),
+            ],
+            FIRST_NUMBER: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, get_first_number),
+                CallbackQueryHandler(start, pattern='^cancel$')
+            ],
+            OPERATION: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, get_operation)
+            ],
+            LAST_NUMBER: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, get_last_number),
+                CallbackQueryHandler(start, pattern='^cancel$')
             ],
             TONE: [
                 MessageHandler(filters.TEXT & ~filters.COMMAND, tone_handler)
@@ -39,9 +60,6 @@ if __name__ == "__main__":
                 MessageHandler(filters.TEXT & ~filters.COMMAND, answer_handler),
                 CallbackQueryHandler(start, pattern='^go_main_menu$')
             ],
-            # LANG_FROM: [
-            #     MessageHandler(filters.TEXT & ~filters.COMMAND, lang_from_handler)
-            # ],
             LANG_TO: [
                 MessageHandler(filters.TEXT & ~filters.COMMAND, lang_to_handler)
             ],

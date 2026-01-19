@@ -3,6 +3,9 @@
     TONE,
     TRANSLATION,
     ANSWER,
-    LANG_FROM,
     LANG_TO,
-) = range(6)
+    MATEMATICS_MENU,
+    FIRST_NUMBER,
+    LAST_NUMBER,
+    OPERATION
+) = range(9)
