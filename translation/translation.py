@@ -47,7 +47,7 @@ async def lang_to_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def answer_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [[InlineKeyboardButton("в главное меню", callback_data="go_main_menu")]]
-    reply_markup = InlineKeyboardMarkup(keyboard)
+    markup = InlineKeyboardMarkup(keyboard)
     translation = context.user_data["translation"]
     tone = context.user_data["tone"]
     lang_to = update.effective_message.text
@@ -71,5 +71,5 @@ async def answer_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         text=response.output_text,
-        reply_markup=reply_markup,
+        reply_markup=markup,
     )
