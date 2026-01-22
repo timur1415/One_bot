@@ -3,7 +3,7 @@ from telegram.ext import (
 )
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 
-from config.states import EQUATION_HANDLER, MATEMATICS_MENU
+from config.states import EQUATION_MENU, MATEMATICS_MENU
 
 
 async def matematics_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -27,9 +27,10 @@ async def equation_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [InlineKeyboardButton("фото уравнения", callback_data="photo_equation")],
         [InlineKeyboardButton("текст уравнение", callback_data="input_equation")],
+        [InlineKeyboardButton("в главное меню", callback_data="go_main_menu")],
     ]
     markup = InlineKeyboardMarkup(keyboard)
     await query.edit_message_text(
         text="Выберите способ ввода уравнения:", reply_markup=markup
     )
-    return EQUATION_HANDLER
+    return EQUATION_MENU

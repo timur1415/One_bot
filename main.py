@@ -20,8 +20,9 @@ from config.states import (
     FIRST_NUMBER,
     LAST_NUMBER,
     OPERATION,
-    EQUATION_HANDLER,
+    EQUATION_MENU,
     EQUATION_TEXT_RESULT,
+    EQUATION_PHOTO_RESULT,
 )
 
 from matematic.equation.equation_text import equation_text_handler
@@ -45,12 +46,14 @@ from matematic.calculator import (
 
 from matematic.equation.equation_text import equation_text_result
 
+from matematic.equation.equation_photo import equation_photo_handler, equation_photo_result
+
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
 
 if __name__ == "__main__":
-    persistence = PicklePersistence(filepath="game_bot")
+    persistence = PicklePersistence(filepath="one_bot")
     application = ApplicationBuilder().token(TOKEN).persistence(persistence).build()
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler("start", start)],
@@ -85,8 +88,8 @@ if __name__ == "__main__":
                 CallbackQueryHandler(start, pattern="^go_main_menu$"),
             ],
             LANG_TO: [MessageHandler(filters.TEXT & ~filters.COMMAND, lang_to_handler)],
-            EQUATION_HANDLER: [
-                CallbackQueryHandler(equation_text_handler, pattern="^photo_equation$"),
+            EQUATION_MENU: [
+                CallbackQueryHandler(equation_photo_handler, pattern="^photo_equation$"),
                 CallbackQueryHandler(equation_text_handler, pattern="^input_equation$"),
                 CallbackQueryHandler(start, pattern="^go_main_menu$"),
             ],
@@ -94,6 +97,10 @@ if __name__ == "__main__":
                 MessageHandler(filters.TEXT & ~filters.COMMAND, equation_text_result),
                 CallbackQueryHandler(start, pattern="^go_main_menu$"),
             ],
+            EQUATION_PHOTO_RESULT: [
+                MessageHandler(filters.PHOTO & ~filters.COMMAND, equation_photo_result),
+                CallbackQueryHandler(start, pattern="^go_main_menu$"),
+            ]
         },
         fallbacks=[CommandHandler("start", start)],
         name="OneBot",
