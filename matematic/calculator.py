@@ -1,7 +1,12 @@
 from telegram.ext import ContextTypes
-from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import (
+    Update,
+    ReplyKeyboardMarkup,
+    ReplyKeyboardRemove,
+)
 
 from config.states import FIRST_NUMBER, LAST_NUMBER, OPERATION
+from start import start
 
 
 async def first_number(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -10,71 +15,70 @@ async def first_number(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     return FIRST_NUMBER
 
+
 async def get_first_number(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    keyboard_operation = [['+', '-'], ['*', '/']]
+    keyboard_operation = [["+", "-"], ["*", "/"]]
     markup_operation = ReplyKeyboardMarkup(keyboard_operation)
-    keyboard_false = [[InlineKeyboardButton("начать заново", callback_data="cancel")]]
-    markup_false = InlineKeyboardMarkup(keyboard_false)
     try:
         first_num = float(update.message.text)
-        context.user_data['first_number'] = first_num
+        context.user_data["first_number"] = first_num
         await context.bot.send_message(
-            chat_id=update.effective_chat.id, text="Выберете знак операции:",
-            reply_markup=markup_operation
+            chat_id=update.effective_chat.id,
+            text="Выберете знак операции:",
+            reply_markup=markup_operation,
         )
         return OPERATION
     except ValueError:
         await context.bot.send_message(
-            chat_id=update.effective_chat.id, text="Пожалуйста, введите корректное число.", reply_markup=markup_false
+            chat_id=update.effective_chat.id,
+            text="Пожалуйста, введите корректное число.",
         )
+        return await first_number(update, context)
+
 
 async def get_operation(update: Update, context: ContextTypes.DEFAULT_TYPE):
     operation = update.message.text
-    context.user_data['operation'] = operation
+    context.user_data["operation"] = operation
     await context.bot.send_message(
-        chat_id=update.effective_chat.id, text="Введите второе число:", reply_markup=ReplyKeyboardRemove()
+        chat_id=update.effective_chat.id,
+        text="Введите второе число:",
+        reply_markup=ReplyKeyboardRemove(),
     )
     return LAST_NUMBER
 
+
 async def get_last_number(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    keyboard = [[InlineKeyboardButton("начать заново", callback_data="cancel")]]
-    markup = InlineKeyboardMarkup(keyboard)
     try:
         last_num = float(update.message.text)
-        context.user_data['last_number'] = last_num
+        context.user_data["last_number"] = last_num
 
-        first_num = context.user_data['first_number']
-        operation = context.user_data['operation']
+        first_num = context.user_data["first_number"]
+        operation = context.user_data["operation"]
 
-        if operation == '+':
+        if operation == "+":
             result = first_num + last_num
-        elif operation == '-':
+        elif operation == "-":
             result = first_num - last_num
-        elif operation == '*':
+        elif operation == "*":
             result = first_num * last_num
-        elif operation == '/':
-            if last_num == 0:
-                await context.bot.send_message(
-                    chat_id=update.effective_chat.id, text="Ошибка: Деление на ноль невозможно.",
-                    reply_markup=markup
-                )
-        
+        elif operation == "/":
             result = first_num / last_num
         else:
             await context.bot.send_message(
-                chat_id=update.effective_chat.id, text="Ошибка: Некорректная операция.",
-                reply_markup=markup
+                chat_id=update.effective_chat.id,
+                text="Ошибка: Некорректная операция.",
             )
-    
+            return await first_number(update, context)
 
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
             text=f"Результат:\n{first_num} {operation} {last_num} = {result}",
-            reply_markup=markup
         )
+        return await start(update, context)
 
     except ValueError:
         await context.bot.send_message(
-            chat_id=update.effective_chat.id, text="Пожалуйста, введите корректное число.",
-            reply_markup=markup
+            chat_id=update.effective_chat.id,
+            text="Пожалуйста, введите корректное число.",
         )
+        return await first_number(update, context)

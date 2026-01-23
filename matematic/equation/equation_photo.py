@@ -11,6 +11,8 @@ from config.config import CHAT_GPT_TOKEN
 
 from config.states import EQUATION_PHOTO_RESULT
 
+from start import start
+
 async def equation_photo_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query   
     await query.answer()
@@ -21,9 +23,6 @@ async def equation_photo_handler(update: Update, context: ContextTypes.DEFAULT_T
     return EQUATION_PHOTO_RESULT
 
 async def equation_photo_result(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    query = update.callback_query
-    keyboard = [[InlineKeyboardButton('в главное меню', callback_data='go_main_menu')]]
-    markup = InlineKeyboardMarkup(keyboard)
     photo_file = await update.message.photo[-1].get_file()
     photo_path = await photo_file.download_to_drive()
 
@@ -76,7 +75,6 @@ x = 4""",
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         text=response.choices[0].message.content,
-        reply_markup=markup,
     )
     
     
@@ -84,3 +82,5 @@ x = 4""",
         os.remove(photo_path)
     except Exception as e:
         print(f"Ошибка при удалении файла: {e}")
+
+    return await start(update, context)    

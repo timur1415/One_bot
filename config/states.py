@@ -11,4 +11,6 @@
     EQUATION_MENU,
     EQUATION_TEXT_RESULT,
     EQUATION_PHOTO_RESULT,
-) = range(12)
+    RESULT_KNB,
+    GAME_HANDLER,
+) = range(14)

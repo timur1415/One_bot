@@ -23,15 +23,19 @@ from config.states import (
     EQUATION_MENU,
     EQUATION_TEXT_RESULT,
     EQUATION_PHOTO_RESULT,
+    RESULT_KNB,
+    GAME_HANDLER,
 )
 
+from game.game_handler import game_handler
+from game.knb import knb_result, knb_start
 from matematic.equation.equation_text import equation_text_handler
 from translation.translation import (
     translation_handler,
     tone_handler,
     answer_handler,
     lang_to_handler,
-) 
+)
 
 from start import start
 
@@ -46,7 +50,10 @@ from matematic.calculator import (
 
 from matematic.equation.equation_text import equation_text_result
 
-from matematic.equation.equation_photo import equation_photo_handler, equation_photo_result
+from matematic.equation.equation_photo import (
+    equation_photo_handler,
+    equation_photo_result,
+)
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -63,12 +70,12 @@ if __name__ == "__main__":
                     translation_handler, pattern="^start_translation$"
                 ),
                 CallbackQueryHandler(matematics_handler, pattern="^start_mathematics$"),
+                CallbackQueryHandler(game_handler, pattern="^start_games$"),
             ],
             MATEMATICS_MENU: [
                 CallbackQueryHandler(first_number, pattern="^calculator$"),
-                CallbackQueryHandler(
-                    equation_handler, pattern="^equation$"
-                ),
+                CallbackQueryHandler(equation_handler, pattern="^equation$"),
+                CallbackQueryHandler(start, pattern="^go_main_menu$"),
             ],
             FIRST_NUMBER: [
                 MessageHandler(filters.TEXT & ~filters.COMMAND, get_first_number),
@@ -89,7 +96,9 @@ if __name__ == "__main__":
             ],
             LANG_TO: [MessageHandler(filters.TEXT & ~filters.COMMAND, lang_to_handler)],
             EQUATION_MENU: [
-                CallbackQueryHandler(equation_photo_handler, pattern="^photo_equation$"),
+                CallbackQueryHandler(
+                    equation_photo_handler, pattern="^photo_equation$"
+                ),
                 CallbackQueryHandler(equation_text_handler, pattern="^input_equation$"),
                 CallbackQueryHandler(start, pattern="^go_main_menu$"),
             ],
@@ -100,7 +109,15 @@ if __name__ == "__main__":
             EQUATION_PHOTO_RESULT: [
                 MessageHandler(filters.PHOTO & ~filters.COMMAND, equation_photo_result),
                 CallbackQueryHandler(start, pattern="^go_main_menu$"),
-            ]
+            ],
+            RESULT_KNB: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, knb_result),
+                CallbackQueryHandler(start, pattern="^exit_knb$"),
+            ],
+            GAME_HANDLER: [
+                CallbackQueryHandler(start, pattern="^go_main_menu$"),
+                CallbackQueryHandler(knb_start, pattern="^start_knb$"),
+            ],
         },
         fallbacks=[CommandHandler("start", start)],
         name="OneBot",

@@ -8,6 +8,7 @@ from openai import AsyncOpenAI
 from config.states import EQUATION_TEXT_RESULT
 
 from config.config import CHAT_GPT_TOKEN
+from start import start
 
 
 async def equation_text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -21,8 +22,6 @@ async def equation_text_handler(update: Update, context: ContextTypes.DEFAULT_TY
 
 
 async def equation_text_result(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    keyboard = [[InlineKeyboardButton("в главное меню", callback_data="go_main_menu")]]
-    markup = InlineKeyboardMarkup(keyboard)
     equation = update.effective_message.text
 
     client = AsyncOpenAI(api_key=CHAT_GPT_TOKEN)
@@ -43,5 +42,5 @@ async def equation_text_result(update: Update, context: ContextTypes.DEFAULT_TYP
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         text=response.choices[0].message.content,
-        reply_markup=markup,
     )
+    return await start(update, context)
