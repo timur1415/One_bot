@@ -11,6 +11,7 @@ from telegram.ext import (
 from config.config import TOKEN
 
 from config.states import (
+    TO_CURRENCY_SELECTED,
     TONE,
     TRANSLATION,
     ANSWER,
@@ -25,6 +26,8 @@ from config.states import (
     EQUATION_PHOTO_RESULT,
     RESULT_KNB,
     GAME_HANDLER,
+    TO_CURRENCY,
+    AMOUNT,
 )
 
 from game.game_handler import game_handler
@@ -55,6 +58,8 @@ from matematic.equation.equation_photo import (
     equation_photo_result,
 )
 
+from converter.converter import convert_start, to_currency, amount, to_currency_selected
+
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
@@ -71,6 +76,7 @@ if __name__ == "__main__":
                 ),
                 CallbackQueryHandler(matematics_handler, pattern="^start_mathematics$"),
                 CallbackQueryHandler(game_handler, pattern="^start_games$"),
+                CallbackQueryHandler(convert_start, pattern="^start_converter$"),
             ],
             MATEMATICS_MENU: [
                 CallbackQueryHandler(first_number, pattern="^calculator$"),
@@ -117,6 +123,16 @@ if __name__ == "__main__":
             GAME_HANDLER: [
                 CallbackQueryHandler(start, pattern="^go_main_menu$"),
                 CallbackQueryHandler(knb_start, pattern="^start_knb$"),
+            ],
+            TO_CURRENCY: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, to_currency)
+            ],
+            AMOUNT: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, amount), 
+                CallbackQueryHandler(start, pattern="^start$"),
+            ],
+            TO_CURRENCY_SELECTED: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, to_currency_selected)
             ],
         },
         fallbacks=[CommandHandler("start", start)],

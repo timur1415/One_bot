@@ -18,7 +18,7 @@ async def first_number(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def get_first_number(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard_operation = [["+", "-"], ["*", "/"]]
-    markup_operation = ReplyKeyboardMarkup(keyboard_operation)
+    markup_operation = ReplyKeyboardMarkup(keyboard_operation, one_time_keyboard=True)
     try:
         first_num = float(update.message.text)
         context.user_data["first_number"] = first_num
@@ -41,8 +41,7 @@ async def get_operation(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data["operation"] = operation
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text="Введите второе число:",
-        reply_markup=ReplyKeyboardRemove(),
+        text="Введите второе число:"
     )
     return LAST_NUMBER
 

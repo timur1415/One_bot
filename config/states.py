@@ -13,4 +13,7 @@
     EQUATION_PHOTO_RESULT,
     RESULT_KNB,
     GAME_HANDLER,
-) = range(14)
+    TO_CURRENCY,
+    AMOUNT,
+    TO_CURRENCY_SELECTED,
+) = range(17)

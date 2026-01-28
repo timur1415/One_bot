@@ -8,7 +8,8 @@ from config.states import MAIN_MENU
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [[InlineKeyboardButton("перевод текста в нужном тоне ", callback_data='start_translation')],
                 [InlineKeyboardButton("математика", callback_data='start_mathematics')],
-                [InlineKeyboardButton("игры", callback_data='start_games')]]
+                [InlineKeyboardButton("игры", callback_data='start_games')],
+                [InlineKeyboardButton("конвертер валют", callback_data='start_converter')]]
     markup = InlineKeyboardMarkup(keyboard)
     query = update.callback_query
     if query:
