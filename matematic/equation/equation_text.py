@@ -1,7 +1,7 @@
 from telegram.ext import (
     ContextTypes,
 )
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update
 
 from openai import AsyncOpenAI
 
@@ -27,7 +27,7 @@ async def equation_text_result(update: Update, context: ContextTypes.DEFAULT_TYP
     client = AsyncOpenAI(api_key=CHAT_GPT_TOKEN)
 
     response = await client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-5.2",
         messages=[
             {
                 "role": "system",

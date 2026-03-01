@@ -16,4 +16,7 @@
     TO_CURRENCY,
     AMOUNT,
     TO_CURRENCY_SELECTED,
-) = range(17)
+    TEXT_MENU,
+    TEXT,
+    CORRECTION
+) = range(20)

@@ -1,7 +1,7 @@
 from telegram.ext import (
     ContextTypes,
 )
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update
 
 from openai import AsyncOpenAI
 import base64
@@ -33,7 +33,6 @@ async def equation_photo_result(update: Update, context: ContextTypes.DEFAULT_TY
 
     response = await client.chat.completions.create(
         model="gpt-5.2",
-        # reasoning=''
         messages=[
             {
                 "role": "system",

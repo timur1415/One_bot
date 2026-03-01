@@ -11,6 +11,8 @@ from telegram.ext import (
 from config.config import TOKEN
 
 from config.states import (
+    CORRECTION,
+    TEXT_MENU,
     TO_CURRENCY_SELECTED,
     TONE,
     TRANSLATION,
@@ -28,11 +30,14 @@ from config.states import (
     GAME_HANDLER,
     TO_CURRENCY,
     AMOUNT,
+    TEXT
 )
 
 from game.game_handler import game_handler
 from game.knb import knb_result, knb_start
 from matematic.equation.equation_text import equation_text_handler
+from text.text_correction import correction, text
+from text.text_handler import text_handler  
 from translation.translation import (
     translation_handler,
     tone_handler,
@@ -77,6 +82,7 @@ if __name__ == "__main__":
                 CallbackQueryHandler(matematics_handler, pattern="^start_mathematics$"),
                 CallbackQueryHandler(game_handler, pattern="^start_games$"),
                 CallbackQueryHandler(convert_start, pattern="^start_converter$"),
+                CallbackQueryHandler(text_handler, pattern="^text$"),
             ],
             MATEMATICS_MENU: [
                 CallbackQueryHandler(first_number, pattern="^calculator$"),
@@ -134,6 +140,16 @@ if __name__ == "__main__":
             TO_CURRENCY_SELECTED: [
                 MessageHandler(filters.TEXT & ~filters.COMMAND, to_currency_selected)
             ],
+            TEXT_MENU: [
+                CallbackQueryHandler(text, pattern="^correction$"),
+                CallbackQueryHandler(start, pattern="^go_main_menu$"),
+            ],
+            TEXT: [
+                    MessageHandler(filters.TEXT & ~filters.COMMAND, text)
+                ],
+            CORRECTION: [
+                    MessageHandler(filters.TEXT & ~filters.COMMAND, correction)
+                ]
         },
         fallbacks=[CommandHandler("start", start)],
         name="OneBot",
