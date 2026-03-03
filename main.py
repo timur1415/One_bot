@@ -8,9 +8,12 @@ from telegram.ext import (
     CallbackQueryHandler,
     PicklePersistence,
 )
+from ai.ai_handler import ai_handler
 from config.config import TOKEN
 
 from config.states import (
+    AI,
+    AI_MENU,
     CORRECTION,
     TEXT_MENU,
     TO_CURRENCY_SELECTED,
@@ -65,6 +68,8 @@ from matematic.equation.equation_photo import (
 
 from converter.converter import convert_start, to_currency, amount, to_currency_selected
 
+from ai.ai import ai_answer
+
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
@@ -83,6 +88,7 @@ if __name__ == "__main__":
                 CallbackQueryHandler(game_handler, pattern="^start_games$"),
                 CallbackQueryHandler(convert_start, pattern="^start_converter$"),
                 CallbackQueryHandler(text_handler, pattern="^text$"),
+                CallbackQueryHandler(ai_handler, pattern="^ai$"),
             ],
             MATEMATICS_MENU: [
                 CallbackQueryHandler(first_number, pattern="^calculator$"),
@@ -149,7 +155,14 @@ if __name__ == "__main__":
                 ],
             CORRECTION: [
                     MessageHandler(filters.TEXT & ~filters.COMMAND, correction)
-                ]
+                ],
+            AI_MENU: [
+                CallbackQueryHandler(start, pattern="^go_main_menu$"),
+                CallbackQueryHandler(ai_answer, pattern="^ai_answer$"),
+                ],
+            AI: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, ai_answer)
+            ]
         },
         fallbacks=[CommandHandler("start", start)],
         name="OneBot",

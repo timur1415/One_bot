@@ -18,5 +18,7 @@
     TO_CURRENCY_SELECTED,
     TEXT_MENU,
     TEXT,
-    CORRECTION
-) = range(20)
+    CORRECTION,
+    AI_MENU,
+    AI
+) = range(22)

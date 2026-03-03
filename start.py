@@ -10,7 +10,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 [InlineKeyboardButton("математика", callback_data='start_mathematics')],
                 [InlineKeyboardButton("игры", callback_data='start_games')],
                 [InlineKeyboardButton("конвертер валют", callback_data='start_converter')],
-                [InlineKeyboardButton("работа с текстом", callback_data='text')]]
+                [InlineKeyboardButton("работа с текстом", callback_data='text')],
+                [InlineKeyboardButton("нейросеть", callback_data='ai')]]
                 
     markup = InlineKeyboardMarkup(keyboard)
     query = update.callback_query
