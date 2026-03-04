@@ -15,6 +15,6 @@ async def ai_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     await query.edit_message_text(
-        text="", reply_markup=reply_markup
+        text="ответы на вопросы", reply_markup=reply_markup
     )
     return AI_MENU

@@ -10,6 +10,8 @@ from openai import OpenAI
 from config.config import CHAT_GPT_TOKEN
 
 async def text(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    query.answer()
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         text="Введите текст для исправления ошибок:"

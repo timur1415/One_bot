@@ -10,6 +10,8 @@ from start import start
 
 
 async def first_number(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    query.answer()
     await context.bot.send_message(
         chat_id=update.effective_chat.id, text="Введите первое число:"
     )
@@ -33,7 +35,7 @@ async def get_first_number(update: Update, context: ContextTypes.DEFAULT_TYPE):
             chat_id=update.effective_chat.id,
             text="Пожалуйста, введите корректное число.",
         )
-        return await first_number(update, context)
+        return await start(update, context)
 
 
 async def get_operation(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -67,7 +69,7 @@ async def get_last_number(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 chat_id=update.effective_chat.id,
                 text="Ошибка: Некорректная операция.",
             )
-            return await first_number(update, context)
+            return await start(update, context)
 
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
@@ -80,4 +82,4 @@ async def get_last_number(update: Update, context: ContextTypes.DEFAULT_TYPE):
             chat_id=update.effective_chat.id,
             text="Пожалуйста, введите корректное число.",
         )
-        return await first_number(update, context)
+        return await start(update, context)

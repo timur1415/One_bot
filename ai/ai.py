@@ -8,6 +8,8 @@ from config.states import AI
 client = AsyncOpenAI(api_key=CHAT_GPT_TOKEN)
 
 async def ai_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    query.answer()
     keyboard = [
         [InlineKeyboardButton("в главное меню", callback_data="go_main_menu")],
     ]
@@ -16,7 +18,6 @@ async def ai_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Если истории нет — создаём её
     if "history" not in context.user_data:
-        context.user_data.clear()
         context.user_data["history"] = [
             {
                 "role": "system",

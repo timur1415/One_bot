@@ -161,7 +161,8 @@ if __name__ == "__main__":
                 CallbackQueryHandler(ai_answer, pattern="^ai_answer$"),
                 ],
             AI: [
-                MessageHandler(filters.TEXT & ~filters.COMMAND, ai_answer)
+                MessageHandler(filters.TEXT & ~filters.COMMAND, ai_answer),
+                CallbackQueryHandler(start, pattern="^go_main_menu$"),
             ]
         },
         fallbacks=[CommandHandler("start", start)],
