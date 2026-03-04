@@ -12,19 +12,7 @@ async def ai_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [InlineKeyboardButton("в главное меню", callback_data="go_main_menu")],
     ]
     markup = InlineKeyboardMarkup(keyboard)
-    
-    # Обработка callback_query (кнопка) VS текстового сообщения
-    if update.callback_query:
-        query = update.callback_query
-        await query.answer()
-        # Если это просто кнопка без текста — просим пользователя отправить вопрос
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            text="Отправьте ваш вопрос:"
-        )
-        return AI
-    
-    user_message = update.message.text
+    user_message = update.effective_message.text
 
     # Если истории нет — создаём её
     if "history" not in context.user_data:
@@ -43,7 +31,7 @@ async def ai_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Отправляем всю историю в модель
     response = await client.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-5.2",
         messages=context.user_data["history"],
     )
 
