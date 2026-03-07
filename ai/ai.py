@@ -14,7 +14,7 @@ async def ai_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
     markup = InlineKeyboardMarkup(keyboard)
     user_message = update.effective_message.text
 
-    # Если истории нет — создаём её
+    
     if "history" not in context.user_data:
         context.user_data["history"] = [
             {
@@ -23,13 +23,13 @@ async def ai_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
             }
         ]
 
-    # Добавляем сообщение пользователя
+    
     context.user_data["history"].append({
         "role": "user",
         "content": user_message
     })
 
-    # Отправляем всю историю в модель
+    
     response = await client.chat.completions.create(
         model="gpt-5.2",
         messages=context.user_data["history"],
@@ -37,13 +37,13 @@ async def ai_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     assistant_reply = response.choices[0].message.content
 
-    # Сохраняем ответ ассистента в историю
+    
     context.user_data["history"].append({
         "role": "assistant",
         "content": assistant_reply
     })
 
-    # Ограничение истории (например, последние 10 сообщений)
+    
     context.user_data["history"] = context.user_data["history"][-5:]
 
     await context.bot.send_message(
